@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-fe
+spec:
+  selector:
+    matchLabels:
+      app: home-fe
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: home-fe
+    spec:
+      containers:
+        - name: home-fe
+          image: ccpcontainerregistry.azurecr.io/home-fe:v0.0.22
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 50m
+              memory: "256Mi"
+            requests:
+              cpu: 10m
+              memory: "50Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10

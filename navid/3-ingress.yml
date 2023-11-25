@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: home-fe
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+        - home-fe.eus-sandbox.internal-kognitiv.com
+      secretName: home-fe-sandbox-ik-tls
+  ingressClassName: nginx
+  rules:
+    - host: home-fe.eus-sandbox.internal-kognitiv.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: home-fe
+                port:
+                  number: 80
